@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: api_nest
+    restart: always
+    build: .
+    depends_on:
+      - db
+    env_file:
+      - .env
+    ports:
+      - $API_PORT
+    volumes:
+      - .:/www/src/app
+      - /www/src/app/node_modules
+  db:
+    env_file:
+      - .env
+    container_name: $DB_CONTAINER_NAME
+    image: mongo:latest
+    volumes:
+      - mongodata:/data/db
+    environment:
+      - MONGODB_DATABASE=$MONGODB_DATABASE
+    ports:
+      - $MONGO_PORT
+volumes:
+  mongodata:
